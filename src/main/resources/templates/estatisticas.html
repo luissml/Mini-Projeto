@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Estatísticas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; border-radius: 12px; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .stat-icon { font-size: 2.5rem; opacity: 0.8; }
+        .bg-gradient-primary { background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); }
+        .bg-gradient-info { background: linear-gradient(135deg, #0dcaf0 0%, #08a0e9 100%); }
+        .bg-gradient-success { background: linear-gradient(135deg, #198754 0%, #146c43 100%); }
+        .bg-gradient-danger { background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark"><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Estatísticas de Atendimento</h2>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow bg-gradient-primary text-white h-100">
+                <div class="card-body p-4 position-relative overflow-hidden">
+                    <i class="bi bi-people-fill position-absolute text-white-50 stat-icon" style="right: -10px; bottom: -10px; font-size: 6rem;"></i>
+                    <h6 class="text-uppercase fw-bold text-white-50 mb-3">Total Geral</h6>
+                    <h1 class="display-4 fw-bold mb-0" th:text="${total}">0</h1>
+                    <p class="mb-0 mt-2 text-white-50"><i class="bi bi-arrow-up-right me-1"></i>Atendimentos na semana</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow bg-gradient-info text-white h-100">
+                <div class="card-body p-4 position-relative overflow-hidden">
+                    <i class="bi bi-calculator-fill position-absolute text-white-50 stat-icon" style="right: -10px; bottom: -10px; font-size: 6rem;"></i>
+                    <h6 class="text-uppercase fw-bold text-white-50 mb-3">Média Diária</h6>
+                    <h1 class="display-4 fw-bold mb-0" th:text="${#numbers.formatDecimal(media, 1, 1)}">0.0</h1>
+                    <p class="mb-0 mt-2 text-white-50"><i class="bi bi-activity me-1"></i>Média por dia</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow bg-gradient-success text-white h-100">
+                <div class="card-body p-4 position-relative overflow-hidden">
+                    <i class="bi bi-graph-up-arrow position-absolute text-white-50 stat-icon" style="right: -10px; bottom: -10px; font-size: 6rem;"></i>
+                    <h6 class="text-uppercase fw-bold text-white-50 mb-3">Maior Fluxo</h6>
+                    <h2 class="fw-bold mb-1" th:text="${diaMaiorNome}">Domingo</h2>
+                    <h4 class="mb-0 fw-light"><span th:text="${diaMaiorQtd}">0</span> <small class="fs-6 text-white-50">atendimentos</small></h4>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow bg-gradient-danger text-white h-100">
+                <div class="card-body p-4 position-relative overflow-hidden">
+                    <i class="bi bi-graph-down-arrow position-absolute text-white-50 stat-icon" style="right: -10px; bottom: -10px; font-size: 6rem;"></i>
+                    <h6 class="text-uppercase fw-bold text-white-50 mb-3">Menor Fluxo</h6>
+                    <h2 class="fw-bold mb-1" th:text="${diaMenorNome}">Domingo</h2>
+                    <h4 class="mb-0 fw-light"><span th:text="${diaMenorQtd}">0</span> <small class="fs-6 text-white-50">atendimentos</small></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fila de Atendimento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; border-radius: 12px; }
+        .table-custom { background-color: white; border-radius: 12px; overflow: hidden; }
+        .table-custom th { border-top: none; background-color: #f1f3f5; color: #495057; font-weight: 600; }
+        .next-patient { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(25, 135, 84, 0); } 100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); } }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark"><i class="bi bi-people-fill me-2 text-primary"></i>Fila de Atendimento</h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- Controle da Fila -->
+        <div class="col-md-4">
+            
+            <!-- Próximo a ser atendido -->
+            <div class="card shadow-sm mb-4 border-success border-2 next-patient">
+                <div class="card-body text-center py-4">
+                    <div class="mb-3">
+                        <span class="badge bg-success px-3 py-2 rounded-pill"><i class="bi bi-bell-fill me-1"></i>Próximo Chamado</span>
+                    </div>
+                    <div th:if="${proximo != null}">
+                        <div class="display-6 fw-bold text-dark mb-2" th:text="${proximo.nome}">Nome</div>
+                        <p class="text-muted mb-4"><i class="bi bi-hash"></i><span th:text="${proximo.id}"></span> | <span th:text="${proximo.idade} + ' anos'"></span></p>
+                        
+                        <form th:action="@{/web/fila/atender}" method="post">
+                            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm rounded-pill">
+                                <i class="bi bi-check-circle-fill me-2"></i>Iniciar Atendimento
+                            </button>
+                        </form>
+                    </div>
+                    <div th:if="${proximo == null}" class="py-3">
+                        <i class="bi bi-cup-hot text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3 mb-0 fw-semibold">Nenhum paciente aguardando.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h5 class="card-title fw-bold"><i class="bi bi-person-plus-fill me-2 text-primary"></i>Adicionar à Fila</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/web/fila/adicionar}" method="post">
+                        <div class="mb-4">
+                            <label for="idPaciente" class="form-label text-muted fw-semibold">Selecione o Paciente</label>
+                            <select name="idPaciente" id="idPaciente" class="form-select border-secondary-subtle" required>
+                                <option value="" disabled selected>Escolha um paciente...</option>
+                                <option th:each="p : ${pacientesDisponiveis}" 
+                                        th:value="${p.id}" 
+                                        th:text="${p.nome} + ' (ID: ' + ${p.id} + ')'"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold"><i class="bi bi-plus-circle me-2"></i>Inserir na Fila</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exibição da Fila -->
+        <div class="col-md-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h5 class="fw-bold mb-0">Visão Geral da Espera</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive table-custom mt-2">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="py-3 text-center" style="width: 100px;">Posição</th>
+                                    <th class="py-3">Paciente</th>
+                                    <th class="py-3 text-center">ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="paciente, iterStat : ${fila}">
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill fs-6 px-3 py-2" th:classappend="${iterStat.count == 1 ? 'bg-success' : 'bg-secondary'}" th:text="${iterStat.count} + 'º'">1º</span>
+                                    </td>
+                                    <td class="fw-semibold text-dark">
+                                        <i class="bi bi-person me-2 text-muted"></i><span th:text="${paciente.nome}">João</span>
+                                    </td>
+                                    <td class="text-center text-muted fw-bold">#<span th:text="${paciente.id}">1</span></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(fila)}">
+                                    <td colspan="3" class="text-center py-5 text-muted">
+                                        <i class="bi bi-emoji-smile fs-1 d-block mb-3 text-black-50"></i>
+                                        Fila vazia no momento.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

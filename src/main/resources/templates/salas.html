@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Salas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; border-radius: 12px; }
+        .sala-box {
+            padding: 25px 15px;
+            text-align: center;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .sala-box:hover { transform: translateY(-5px); }
+        .sala-disponivel { background: linear-gradient(135deg, #198754 0%, #146c43 100%); }
+        .sala-ocupada { background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); }
+        .sala-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark"><i class="bi bi-door-open-fill me-2 text-primary"></i>Controle de Salas</h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- Visualização das Salas -->
+        <div class="col-md-7 col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-grid-fill me-2 text-secondary"></i>Visão do Mapa de Salas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-3" th:each="fileira, iStat : ${matrizSalas}">
+                        <div class="col-sm-6" th:each="status, jStat : ${fileira}">
+                            <div class="sala-box" th:classappend="${status == 0 ? 'sala-disponivel' : 'sala-ocupada'}">
+                                <i class="bi sala-icon" th:classappend="${status == 0 ? 'bi-door-open-fill' : 'bi-door-closed-fill'}"></i>
+                                <h5 class="fw-bold mb-1">Sala <span th:text="${(iStat.index * 2) + jStat.index + 1}"></span></h5>
+                                <span class="badge bg-white text-dark rounded-pill px-3 py-1 shadow-sm mt-2" th:text="${status == 0 ? 'Livre' : 'Em Uso'}">Status</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alterar Status -->
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h5 class="card-title fw-bold"><i class="bi bi-pencil-square me-2 text-primary"></i>Gerenciar Status</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/web/salas/alterar}" method="post">
+                        <div class="mb-3">
+                            <label for="salaNumero" class="form-label text-muted fw-semibold">Selecione a Sala</label>
+                            <select class="form-select" id="salaNumero" name="salaNumero" required>
+                                <option value="" disabled selected>Escolha uma sala...</option>
+                                <option value="1">Sala 1</option>
+                                <option value="2">Sala 2</option>
+                                <option value="3">Sala 3</option>
+                                <option value="4">Sala 4</option>
+                                <option value="5">Sala 5</option>
+                                <option value="6">Sala 6</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="status" class="form-label text-muted fw-semibold">Novo Status</label>
+                            <select name="status" id="status" class="form-select" required>
+                                <option value="0">Liberar Sala (Disponível)</option>
+                                <option value="1">Ocupar Sala</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold"><i class="bi bi-arrow-repeat me-1"></i>Atualizar Mapa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

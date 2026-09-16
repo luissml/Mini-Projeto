@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Componente de navegação reutilizável -->
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 shadow-sm" style="background-color: #2c3e50;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/"><i class="bi bi-heart-pulse-fill text-danger me-2"></i>Clínica Médica</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web/pacientes"><i class="bi bi-person-lines-fill me-1"></i>Pacientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web/fila"><i class="bi bi-people-fill me-1"></i>Fila de Atendimento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web/historico"><i class="bi bi-clock-history me-1"></i>Histórico de Atendimento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web/estatisticas"><i class="bi bi-bar-chart-fill me-1"></i>Estatísticas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web/salas"><i class="bi bi-door-open-fill me-1"></i>Controle de Salas</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+</html>

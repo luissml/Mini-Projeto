@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pacientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; border-radius: 12px; }
+        .table-custom { background-color: white; border-radius: 12px; overflow: hidden; }
+        .table-custom th { border-top: none; background-color: #f1f3f5; color: #495057; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark"><i class="bi bi-person-lines-fill me-2 text-primary"></i>Pacientes</h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- Controles laterais -->
+        <div class="col-md-4">
+            <!-- Formulário de Cadastro -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h5 class="card-title fw-bold"><i class="bi bi-person-plus me-2 text-success"></i>Novo Paciente</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/web/pacientes/cadastrar}" th:object="${novoPaciente}" method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label text-muted fw-semibold">Nome Completo</label>
+                            <input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Digite o nome..." required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="idade" class="form-label text-muted fw-semibold">Idade</label>
+                            <input type="number" class="form-control" id="idade" th:field="*{idade}" placeholder="Ex: 30" required min="0">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold"><i class="bi bi-check2-circle me-1"></i>Salvar</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Busca por ID -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-3"><i class="bi bi-search me-2 text-info"></i>Buscar Paciente</h5>
+                    <form th:action="@{/web/pacientes}" method="get" class="d-flex">
+                        <input type="number" class="form-control me-2" name="idBusca" placeholder="ID do Paciente" required>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                    </form>
+                    <div class="text-center mt-2">
+                        <a href="/web/pacientes" class="text-decoration-none text-muted small"><i class="bi bi-x-circle me-1"></i>Limpar Filtros</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela -->
+        <div class="col-md-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Lista de Cadastrados</h5>
+                    <div>
+                        <div class="btn-group shadow-sm">
+                            <a href="/web/pacientes?ordem=nome" class="btn btn-light btn-sm fw-semibold"><i class="bi bi-sort-alpha-down me-1"></i>Nome</a>
+                            <a href="/web/pacientes?ordem=idade" class="btn btn-light btn-sm fw-semibold"><i class="bi bi-sort-numeric-down me-1"></i>Idade</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive table-custom">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="py-3">#ID</th>
+                                    <th class="py-3">Nome do Paciente</th>
+                                    <th class="py-3 text-center">Idade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="paciente : ${pacientes}">
+                                    <td class="text-muted fw-bold" th:text="${paciente.id}">1</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                            <span class="fw-semibold" th:text="${paciente.nome}">João</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center"><span class="badge bg-light text-dark border px-2 py-1" th:text="${paciente.idade} + ' anos'">30 anos</span></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(pacientes)}">
+                                    <td colspan="3" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox fs-2 d-block mb-2 text-black-50"></i>
+                                        Nenhum paciente encontrado.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

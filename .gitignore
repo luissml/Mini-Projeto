@@ -1,0 +1,23 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes/archetype-resources/META-INF/maven/archetype.xml
+!target/classes/archetype-resources/projects/basic/archetype.properties
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# OS generated
+.DS_Store
+Thumbs.db
