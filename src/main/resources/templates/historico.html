@@ -39,6 +39,12 @@
                             ID do Atendimento: #<span th:text="${ultimoAtendimento.id}"></span>
                         </div>
                         <p class="mb-0 text-white-50"><i class="bi bi-calendar-check me-2"></i><span th:text="${#temporals.format(ultimoAtendimento.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></span></p>
+                        
+                        <form th:action="@{/web/historico/removerUltimo}" method="post" class="mt-3">
+                            <button type="submit" class="btn btn-sm btn-light text-danger fw-bold rounded-pill px-4 shadow-sm">
+                                <i class="bi bi-trash-fill me-2"></i>Remover
+                            </button>
+                        </form>
                     </div>
                     <div th:if="${ultimoAtendimento == null}" class="py-4">
                         <i class="bi bi-journal-x fs-1 text-white-50 mb-3 d-block"></i>

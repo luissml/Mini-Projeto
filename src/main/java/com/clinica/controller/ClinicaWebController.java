@@ -97,6 +97,12 @@ public class ClinicaWebController {
         return "historico";
     }
 
+    @PostMapping("/web/historico/removerUltimo")
+    public String removerUltimoHistorico() {
+        clinicaService.removerUltimoAtendimento();
+        return "redirect:/web/historico";
+    }
+
     @GetMapping("/web/estatisticas")
     public String estatisticasPage(Model model) {
         String[] diasDaSemana = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
